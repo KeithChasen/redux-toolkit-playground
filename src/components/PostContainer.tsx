@@ -18,12 +18,24 @@ const PostContainer = () => {
 	const [createPost, { error: postError, isLoading: postLoading }] =
 		postAPI.useCreatePostMutation();
 
+	const [updatePost, {}] = postAPI.useUpdatePostMutation();
+
+	const [deletePost, {}] = postAPI.useDeletePostMutation();
+
 	const handleCreatePost = async () => {
 		const title = prompt();
 		if (title?.length) {
 			// explicitly add as IPost because server generates id automatically
 			await createPost({ title, body: title } as IPost);
 		}
+	};
+
+	const handleRemove = (id: number) => {
+		deletePost(id);
+	};
+
+	const handleUpdate = (post: IPost) => {
+		updatePost(post);
 	};
 
 	return (
@@ -40,7 +52,15 @@ const PostContainer = () => {
 			/>
 			{isLoading && 'Loading...'}
 			{error && 'Error'}
-			{posts && posts?.map(post => <PostItem key={post.id} post={post} />)}
+			{posts &&
+				posts?.map(post => (
+					<PostItem
+						key={post.id}
+						post={post}
+						remove={handleRemove}
+						update={handleUpdate}
+					/>
+				))}
 		</div>
 	);
 };

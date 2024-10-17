@@ -24,5 +24,20 @@ export const postAPI = createApi({
 			}),
 			invalidatesTags: ['Post'], // automatically invalidate posts when a new one is created
 		}),
+		updatePost: builder.mutation<IPost, IPost>({
+			query: (post: IPost) => ({
+				url: `/posts/${post.id}`,
+				method: 'PUT',
+				body: post,
+			}),
+			invalidatesTags: ['Post'], // automatically invalidate posts when an existing one is updated
+		}),
+		deletePost: builder.mutation<void, number>({
+			query: (id: number) => ({
+				url: `/posts/${id}`,
+				method: 'DELETE',
+			}),
+			invalidatesTags: ['Post'], // automatically invalidate posts when a deleted one is found
+		}),
 	}),
 });
