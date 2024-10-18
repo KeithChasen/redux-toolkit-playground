@@ -4,12 +4,20 @@ import {
 	fetchBaseQuery,
 	FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
+import { RootState } from '../store/store';
 import { logout } from '../store/reducers/AuthSlice';
 
 const baseUrl = 'http://localhost:5001'; // but should be import.meta.env.VITE_SERVER_ENDPOINT
 
 const baseQuery = fetchBaseQuery({
 	baseUrl,
+	prepareHeaders: (headers, { getState }) => {
+		const token = (getState() as RootState).authReducer.token;
+		if (token) {
+			headers.set('Authorization', `Bearer ${token}`);
+		}
+		return headers;
+	},
 });
 
 const customFetchBase: BaseQueryFn<
