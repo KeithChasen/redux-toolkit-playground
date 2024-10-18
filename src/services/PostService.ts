@@ -10,6 +10,7 @@ export const postAPI = createApi({
 		fetchAllPosts: builder.query<IPost[], number>({
 			query: (limit: number = 5) => ({
 				url: '/posts',
+				// credentials: 'include', !for authorisation
 				params: {
 					_limit: limit,
 				},
